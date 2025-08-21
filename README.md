@@ -73,7 +73,7 @@ go run main.go -path="./test_shred" -iters=3 -recurse=true -force=true
 A `test.sh` script sets up a test environment with files, directories, and symlinks, then runs the shredder. After completion, it confirms that all targets are removed.
 
 ```
-sh test.sh
+./test.sh
 ```
 
 ---
@@ -105,10 +105,10 @@ Optional for testing:
 
 * Does not handle read-only or locked files.
 * Cannot guarantee secure deletion on networked or non-standard file systems.
-* Might start too many Gorotines if you have a long directory chain (e.g. ./path1/path2/path3/path4/..../path999/) despite such chains are not possible in most consumer filesystems
+* Might start too many Gorotines if you have a long directory chain (e.g. ./path1/path2/path3/path4/..../path999/) although such directory chains are not possible in most consumer OS filesystems
 
 ---
 
 ## License
 
-This project is licensed under no license because ~~I have no clue which license to pick~~ this is an interview project. The code may be used freely anywhere aslong as the file is equiped with a visible disclaimer linking to this GitHub repository
+This project is licensed under no license because it is an interview project. The code may be used freely anywhere as long as the file is equiped with a visible disclaimer linking to this GitHub repository

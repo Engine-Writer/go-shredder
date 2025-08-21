@@ -53,7 +53,7 @@ func overwriteFile(path string) error {
     return nil
 }
 
-func shred(path string, iters int, recurse bool, force bool) error {
+func shred_expanded(path string, iters int, recurse bool, force bool) error {
     info, err := os.Lstat(path)
     if err != nil {
         return err
@@ -88,7 +88,7 @@ func shred(path string, iters int, recurse bool, force bool) error {
                 defer wg.Done()
                 defer func() { <-sem }() // release slot
 
-                if err := shred(p, iters, recurse, force); err != nil && !force {
+                if err := shred_expanded(p, iters, recurse, force); err != nil && !force {
                     errChan <- err
                 }
             }(childPath)
@@ -114,6 +114,11 @@ func shred(path string, iters int, recurse bool, force bool) error {
     return os.Remove(path)
 }
 
+// To strictly comply with the requirement
+func Shred(path string) error {
+    return shred_expanded(path, 3, false, false); // no -r or -f specified in the requirements so I set it to false
+}
+
 func main() {
     path := flag.String("path", "", "File or directory to shred")
     iters := flag.Int("iters", 3, "Number of overwrite iterations")
@@ -127,7 +132,7 @@ func main() {
         os.Exit(1)
     }
 
-    err := shred(*path, *iters, *recurse, *force)
+    err := shred_expanded(*path, *iters, *recurse, *force)
     if err != nil {
         fmt.Println("Failed to shred:", err)
     } else {
